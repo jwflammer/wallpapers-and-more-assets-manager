@@ -7,14 +7,14 @@
 # keep track of assets and their metadata
 # keep track of assets likes
 # keep track of assets downloads
-
 import os
 import sys
 import shutil
+import zipfile
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QTreeView
 from PyQt5.QtWidgets import QGraphicsPixmapItem, QGraphicsScene
-from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileSystemModel, QFileDialog, QMessageBox, QHeaderView
+from PyQt5.QtWidgets import QApplication, QMainWindow, QDialog, QFileSystemModel, QFileDialog, QMessageBox, QHeaderView, QActionGroup
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QImage, QImageReader, QPixmap
 from aboutwindow import AboutWindow
@@ -30,13 +30,38 @@ class MainWindow(QMainWindow):
         self.actionNew_Assets.triggered.connect(self.add_asset)
         self.load_directory_contents()
         self.Remove_Button.clicked.connect(self.remove_asset)
-
+        
+        # Set initial action
+        self.update_label()
+        self.actionDevice.triggered.connect(self.update_label)
+        self.actionDatabase.triggered.connect(self.update_label)
+        
         # Initialize thumbnail scene
         self.thumbnail_scene = QGraphicsScene(self)
         # Connect tree view clicked signal to display thumbnail
         self.Main_treeView.clicked.connect(self.display_selected_thumbnail)
 
-    # Add this method
+    # Display the selected thumbnail in the thumbnail view
+    def update_label(self):
+        label_text = self.label_workingWith.text()
+
+        if self.sender() == self.actionDevice:
+            if self.actionDevice.isChecked():
+                self.actionDatabase.setChecked(False)
+                new_text = "Device"
+            else:
+                self.actionDevice.setChecked(True)
+                return
+        else:
+            if self.actionDatabase.isChecked():
+                self.actionDevice.setChecked(False)
+                new_text = "Database"
+            else:
+                self.actionDatabase.setChecked(True)
+                return
+
+        self.label_workingWith.setText(label_text.replace("Device", new_text).replace("Database", new_text))
+        
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.display_selected_thumbnail(self.Main_treeView.currentIndex())
@@ -51,7 +76,7 @@ class MainWindow(QMainWindow):
         model.setRootPath(assets_dir)
         self.Main_treeView.setModel(model)
         self.Main_treeView.setRootIndex(model.index(assets_dir))
-
+        
         # Hide Size, Type, and Date Modified columns
         self.Main_treeView.setColumnHidden(1, True)
         self.Main_treeView.setColumnHidden(2, True)
@@ -136,8 +161,7 @@ class MainWindow(QMainWindow):
                     QMessageBox.warning(self, "Error", "Failed to create thumbnail for the selected asset.")
             else:
                 QMessageBox.warning(self, "Error", "The selected file is not an image. Please select an image file.")
-
-
+    
     def create_thumbnail(self, original_path, thumbnail_folder, category, original_name, thumbnail_size=(200, 200)):
         if self.is_image_file(original_path):
             image = QImage(original_path)

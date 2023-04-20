@@ -34,6 +34,28 @@
      <number>10</number>
     </property>
     <item>
+     <widget class="QLabel" name="label_workingWith">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Device&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::RichText</enum>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QTreeView" name="Main_treeView">
@@ -131,7 +153,15 @@
     </property>
     <addaction name="actionAbout_WM"/>
    </widget>
+   <widget class="QMenu" name="menuManage">
+    <property name="title">
+     <string>Manage</string>
+    </property>
+    <addaction name="actionDevice"/>
+    <addaction name="actionDatabase"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuManage"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionFile">
@@ -175,6 +205,36 @@
   <action name="actionClose_2">
    <property name="text">
     <string>Close</string>
+   </property>
+  </action>
+  <action name="actionDevice">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Device</string>
+   </property>
+  </action>
+  <action name="actionDatabase">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Database</string>
+   </property>
+  </action>
+  <action name="actiontest">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>test</string>
    </property>
   </action>
  </widget>
